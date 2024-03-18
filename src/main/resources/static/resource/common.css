@@ -1,0 +1,75 @@
+/* 폰트 */
+@font-face {
+	font-family: 'Pretendard-Regular';
+	src:
+		url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff')
+		format('woff');
+	font-weight: 400;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'LINESeedKR-Bd';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2')
+		format('woff2');
+	font-weight: 700;
+	font-style: normal;
+}
+
+html>body {
+	font-family: 'Pretendard-Regular';
+}
+
+/* 커스텀 */
+header>div>ul>li {
+	margin-right: 30px;
+}
+
+/* 표 디자인 */
+.table-box-1 {
+	width: 90%;
+	white-space: nowrap;
+	text-align: center;
+}
+
+.table-box-1 tr,
+.table-box-1 td {
+    padding: 5px;
+}
+
+
+.table-box-1>thead tr {
+	background:#536976; /* 로얄블루 색상 */
+}
+
+.table-box-1 th {
+	border: 1px solid rgba(255, 0, 0, 0.1);
+	font-weight: normal;
+	font-size: 13px;
+	box-shadow: 4px 4px 10px 0 rgba(0, 0, 0, 0.1);
+}
+
+.table-box-1 td {
+	font-weight: normal;
+	font-size: 14px;
+	border: 1px solid rgba(255, 0, 0, 0.1);
+}
+
+/* 기본 네비게이션 2차 메뉴 스타일 */
+header>div>ul>li {
+	position: relative;
+	}
+header>div>ul>li>ul {
+	display: none;
+	position: absolute;
+	background-color: white;
+	right: 0;
+	z-index: 1;
+}
+
+/* 네비게이션 2차 메뉴 호버 스타일 */
+header>div>ul>li:hover>ul {
+	display: block;
+}
+

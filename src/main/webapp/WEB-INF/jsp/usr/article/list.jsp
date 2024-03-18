@@ -19,6 +19,7 @@
 					<th>번호</th>
 					<th>날짜</th>
 					<th>제목</th>
+					<th>작성자</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -30,6 +31,7 @@
 						<td>
 							<a href="detail?id=${article.id }">${article.title } </a>
 						</td>
+						<td>${article.extra__writer }</td>
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -42,13 +44,15 @@
 			<input type="hidden" name="boardId" value="${param.boardId }" />
 
 			<select data-value="${param.searchKeywordTypeCode }" class="select select-bordered select-sm max-w-xs"
-				name="searchKeywordTypeCode">
+				name="searchKeywordTypeCode"
+			>
 				<option value="title">제목</option>
 				<option value="extra__writer">작성자</option>
 				<option value="body">내용</option>
 			</select>
 			<input value="${param.searchKeyword }" name="searchKeyword" type="text" placeholder="What is your searchKeyword?"
-				class="input-sm input input-bordered w-60 max-w-xs mt-3" />
+				class="input-sm input input-bordered w-60 max-w-xs mt-3"
+			/>
 			<button class="btn btn-primary btn-sm" type="submit">검색</button>
 		</form>
 	</div>
@@ -59,23 +63,28 @@
 		<div class="btn-group">
 
 			<a
-				href="list??boardId=${boardId }&page=1&searchKeywordTypeCode=${param.searchKeywordTypeCode}&searchKeyword=${param.searchKeyword}">맨앞</a>
+				href="list??boardId=${boardId }&page=1&searchKeywordTypeCode=${param.searchKeywordTypeCode}&searchKeyword=${param.searchKeyword}"
+			>맨앞</a>
 			<c:if test="${page > pagination.pageSize }">
 				<a
-					href="list?boardId=${boardId }&page=${pagination.from - 1}&searchKeywordTypeCode=${param.searchKeywordTypeCode}&searchKeyword=${param.searchKeyword}">◀</a>
+					href="list?boardId=${boardId }&page=${pagination.from - 1}&searchKeywordTypeCode=${param.searchKeywordTypeCode}&searchKeyword=${param.searchKeyword}"
+				>◀</a>
 			</c:if>
 
 			<c:forEach begin="${pagination.from }" end="${pagination.end}" var="i">
 				<a class="btn btn-sm ${page == i ? 'btn-active' : '' }"
-					href="?boardId=${boardId }&page=${i }&searchKeywordTypeCode=${param.searchKeywordTypeCode}&searchKeyword=${param.searchKeyword}">${i }</a>
+					href="?boardId=${boardId }&page=${i }&searchKeywordTypeCode=${param.searchKeywordTypeCode}&searchKeyword=${param.searchKeyword}"
+				>${i }</a>
 			</c:forEach>
 
 			<c:if test="${pagination.end < pagination.totalPage }">
 				<a
-					href="list?boardId=${boardId }&page=${pagination.from + pagination.pageSize}&searchKeywordTypeCode=${param.searchKeywordTypeCode}&searchKeyword=${param.searchKeyword}">▶</a>
+					href="list?boardId=${boardId }&page=${pagination.from + pagination.pageSize}&searchKeywordTypeCode=${param.searchKeywordTypeCode}&searchKeyword=${param.searchKeyword}"
+				>▶</a>
 			</c:if>
 			<a
-				href="list?boardId=${boardId }&page=${pagination.totalPage}&searchKeywordTypeCode=${param.searchKeywordTypeCode}&searchKeyword=${param.searchKeyword}">맨뒤</a>
+				href="list?boardId=${boardId }&page=${pagination.totalPage}&searchKeywordTypeCode=${param.searchKeywordTypeCode}&searchKeyword=${param.searchKeyword}"
+			>맨뒤</a>
 
 		</div>
 	</div>

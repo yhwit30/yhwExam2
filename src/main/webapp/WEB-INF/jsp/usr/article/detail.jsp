@@ -22,6 +22,10 @@
 					<th>수정날짜</th>
 					<td>${article.updateDate }</td>
 				</tr>
+					<tr>
+					<th>작성자</th>
+					<td>${article.extra__writer }</td>
+				</tr>
 				<tr>
 					<th>제목</th>
 					<td>${article.title }</td>

@@ -15,7 +15,17 @@ public class Article {
 	private int boardId;
 	private String title;
 	private String body;
+	private int goodReactionPoint;
+	private int badReactionPoint;
 	
+	private int extra__repliesCnt;
+	private String extra__writer;
 	private String board_code;
+	private int hitCount;
+	
+	
+	
+	private boolean userCanModify;
+	private boolean userCanDelete;
 
 }

@@ -18,11 +18,12 @@ public interface ArticleRepository {
 			article SET
 			regDate = NOW(),
 			updateDate = NOW(),
+			memberId = #{memberId},
 			title = #{title},
 			`body` = #{body},
 			boardId = #{boardId}
 			""")
-	public void writeArticle(String title, String body, int boardId);
+	public void writeArticle(String title, String body, int memberId, int boardId);
 
 	@Select("SELECT LAST_INSERT_ID()")
 	public int getLastInsertId();
@@ -35,8 +36,10 @@ public interface ArticleRepository {
 	public Article getArticle(int id);
 
 	@Select("""
-			SELECT A.*, B.code AS board_code
+			SELECT A.*, M.nickname AS extra__writer, B.code AS board_code
 			FROM article AS A
+			INNER JOIN `member` AS M
+			ON A.memberId = M.id
 			INNER JOIN board AS B
 			ON A.boardId = B.id
 			GROUP BY A.id
@@ -57,16 +60,22 @@ public interface ArticleRepository {
 	public void modifyArticle(int id, String title, String body);
 
 	@Select("""
-			SELECT A.*
+			SELECT A.*, M.nickname AS extra__writer
 			FROM article AS A
+			INNER JOIN `member` AS M
+			ON A.memberId = M.id
 			ORDER BY A.id DESC
 			""")
 	public List<Article> getArticles();
 
 	@Select("""
 			<script>
-			SELECT A.*
+			SELECT A.*, M.nickname AS extra__writer, IFNULL(COUNT(R.id),0) AS extra__repliesCnt
 			FROM article AS A
+			INNER JOIN `member` AS M
+			ON A.memberId = M.id
+			LEFT JOIN `reply` AS R 
+			ON A.id = R.relId
 			WHERE 1
 			<if test="boardId != 0">
 				AND A.boardId = #{boardId}
@@ -103,6 +112,8 @@ public interface ArticleRepository {
 			<script>
 			SELECT COUNT(*) AS cnt
 			FROM article AS A
+			INNER JOIN `member` AS M
+			ON A.memberId = M.id
 			WHERE 1
 			<if test="boardId != 0">
 				AND boardId = #{boardId}
@@ -129,4 +140,65 @@ public interface ArticleRepository {
 			""")
 	public int getArticlesCount(Integer boardId, String searchKeywordTypeCode, String searchKeyword);
 
+	@Update("""
+			UPDATE article
+			SET	hitCount = hitCount + 1
+			WHERE id = #{id}
+			""")
+	public int increaseHitCount(int id);
+
+	@Select("""
+			SELECT hitCount
+			FROM article
+			WHERE id = #{id}
+			""")
+	public int getArticleHitCount(int id);
+
+	@Update("""
+			UPDATE article
+			SET goodReactionPoint = goodReactionPoint + 1
+			WHERE id = #{relId}
+			""")
+	public int increaseGoodReactionPoint(int relId);
+
+	@Update("""
+			UPDATE article
+			SET goodReactionPoint = goodReactionPoint - 1
+			WHERE id = #{relId}
+			""")
+	public int decreaseGoodReactionPoint(int relId);
+
+	@Update("""
+			UPDATE article
+			SET badReactionPoint = badReactionPoint + 1
+			WHERE id = #{relId}
+			""")
+	public int increaseBadReactionPoint(int relId);
+
+	@Update("""
+			UPDATE article
+			SET badReactionPoint = badReactionPoint - 1
+			WHERE id = #{relId}
+			""")
+	public int decreaseBadReactionPoint(int relId);
+
+	@Select("""
+			SELECT goodReactionPoint
+			FROM article
+			WHERE id = #{relId}
+			""")
+	public int getGoodRP(int relId);
+
+	@Select("""
+			SELECT badReactionPoint
+			FROM article
+			WHERE id = #{relId}
+			""")
+	public int getBadRP(int relId);
+	
+	@Select("""
+			SELECT MAX(id) + 1
+			FROM article
+			""")
+	public int getCurrentArticleId();
 }

@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
-<html>
+<html data-theme="autumn">
 <head>
 <meta charset="UTF-8">
 <title>${pageTitle }</title>
@@ -24,11 +24,12 @@
 <style>
 #logo {
 	background-image: url("/resource/logo.png");
-	height: 70px;
+	height: 65px;
 	width: 70px;
 	background-size: cover;
-	margin-top: -15px;
+	margin-top: -10px;
 	margin-left: 15px;
+	z-index: -99;
 }
 </style>
 
@@ -37,28 +38,41 @@
 <body>
 	<header>
 		<div class="h-14 flex items-center text-3xl">
-			<a class="btn" href="/"> HOME </a>
+			<a href="/">
+				<img id="logo" src="/resource/logo.png" />
+			</a>
 
 			<!-- 게시판 헤드 -->
 			<div class="flex-grow "></div>
 			<ul class="flex ">
 
-				<!-- 글쓰기 메뉴 -->
-				<c:if test="${fn:contains(pageContext.request.requestURI, '/usr/article')}">
+
+				<c:if test="${rq.isLogined()}">
 					<li>
-						<a class="hover:underline" href="../article/write">
-							<i class="fa-solid fa-pen-nib"></i>
-							글쓰기
+						<a class="hover:underline" href="/usr/member/myPage">${rq.loginedMemberNickname }님<i
+								class="fa-solid fa-handshake"></i>
 						</a>
 					</li>
 				</c:if>
 
+				<!-- 글쓰기 버튼 -->
+				<c:if
+					test="${fn:contains(pageContext.request.requestURI, '/usr/article') or fn:contains(pageContext.request.requestURI, '/usr/member/')}">
+					<c:if test="${rq.isLogined()}">
+						<li>
+							<a class="hover:underline" href="../article/write">
+								<i class="fa-solid fa-pen-nib"></i>
+							</a>
+						</li>
+					</c:if>
+				</c:if>
+
 				<!-- 목록 메뉴 -->
-				<c:if test="${fn:contains(pageContext.request.requestURI, '/usr/article')}">
+				<c:if
+					test="${fn:contains(pageContext.request.requestURI, '/usr/article') or fn:contains(pageContext.request.requestURI, '/usr/member/')}">
 					<li>
 						<a class="hover:underline" href="../article/list?boardId=0">
 							<i class="fa-solid fa-table-list"></i>
-							목록
 						</a>
 						<ul>
 							<li>
@@ -71,6 +85,24 @@
 								<a class="hover:underline" href="../article/list?boardId=3&page=1">QnA</a>
 							</li>
 						</ul>
+					</li>
+				</c:if>
+
+				<c:if test="${!rq.isLogined()}">
+					<li>
+						<a class="hover:underline" href="../member/join">
+							<i class="fa-solid fa-user-plus"></i>
+						</a>
+					</li>
+					<li>
+						<a class="hover:underline" href="${rq.loginUri }">LOGIN</a>
+					</li>
+				</c:if>
+
+				<c:if test="${rq.isLogined()}">
+					<li>
+						<a onclick="if(confirm('로그아웃하시겠습니까?') == false) return false;" class="hover:underline"
+							href="/usr/member/doLogout?${rq.logoutUri }">LOGOUT</a>
 					</li>
 				</c:if>
 			</ul>
